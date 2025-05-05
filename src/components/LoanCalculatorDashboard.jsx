@@ -1,36 +1,31 @@
-import React, { useState, useContext } from "react";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Switch,
-  Container,
-  TextField,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Paper,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Box,
-} from "@mui/material";
+import React, { useContext } from "react";
+import { Typography, Button, Container, TextField, Box } from "@mui/material";
 import { AppContext } from "../context/AppContext";
+import AmortizationTable from "./AmortizationTable";
+import EmiCalculator from "./EmiCalculator";
+import Header from "./Header";
+// import { useLoanCalculator } from "../hooks/useLoanCalculator";
+// import { useLoanCalculator } from "../hooks/useLoanCalculator";
 
 export default function LoanCalculatorDashboard() {
-  const [loanAmount, setLoanAmount] = useState(200000);
-  const [interestRate, setInterestRate] = useState(8.5);
-  const [years, setYears] = useState(5);
-  const [schedule, setSchedule] = useState([]);
-  const [emi, setEmi] = useState(null);
-  const [convertedEmi, setConvertedEmi] = useState(null);
-
-  const { currency, setCurrency, darkMode, setDarkMode } =
-    useContext(AppContext);
+  const {
+    currency,
+    setCurrency,
+    darkMode,
+    setDarkMode,
+    loanAmount,
+    setLoanAmount,
+    interestRate,
+    setInterestRate,
+    years,
+    setYears,
+    schedule,
+    setSchedule,
+    emi,
+    setEmi,
+    convertedEmi,
+    setConvertedEmi,
+  } = useContext(AppContext);
 
   const conversionRates = {
     USD: 1,
@@ -121,26 +116,9 @@ export default function LoanCalculatorDashboard() {
 
   return (
     <>
-      <AppBar position="static" color="primary">
-        <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }} align="left">
-            Loan Calculator
-          </Typography>
-          <Box display="flex" alignItems="center" gap={2}>
-            <Button color="inherit">HOME</Button>
-            <Button color="inherit">EXCHANGE RATES (LIVE)</Button>
-            <Button color="inherit">ABOUT</Button>
-            <Button color="inherit">ERROR PAGE</Button>
-            <Switch
-              checked={darkMode}
-              onChange={() => setDarkMode(!darkMode)}
-            />
-          </Box>
-        </Toolbar>
-      </AppBar>
-
+      <Header darkMode={darkMode} setDarkMode={setDarkMode} />
       <Container>
-        <Typography variant="h4" align="center" gutterBottom mt={4}>
+        <Typography variant="h4" align="left" gutterBottom mt={4}>
           Loan Calculator Dashboard
         </Typography>
 
@@ -175,92 +153,16 @@ export default function LoanCalculatorDashboard() {
             </Button>
           </Box>
         </Box>
-
-        {emi && (
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="flex-start"
-            gap={2}
-            mb={3}
-          >
-            <Typography variant="h6">
-              Monthly EMI: {getCurrencySymbol(currency)}
-              {convertedEmi}
-            </Typography>
-
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              width="100%"
-            >
-              <Box display="flex" alignItems="center" gap={2}>
-                <FormControl size="small">
-                  <InputLabel>Currency</InputLabel>
-                  <Select value={currency} onChange={handleCurrencyChange}>
-                    {Object.keys(conversionRates).map((cur) => (
-                      <MenuItem key={cur} value={cur}>
-                        {cur}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-
-                <Typography>
-                  Converted EMI: {convertedEmi} {currency}
-                </Typography>
-              </Box>
-              <Button variant="outlined" color="secondary" onClick={resetTable}>
-                RESET TABLE
-              </Button>
-            </Box>
-          </Box>
-        )}
-
-        {schedule.length > 0 && (
-          <>
-            <Typography variant="h6" gutterBottom>
-              Amortization Schedule ({currency})
-            </Typography>
-            <Paper style={{ maxHeight: 400, overflow: "auto" }}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>
-                      <strong>Month</strong>
-                    </TableCell>
-                    <TableCell align="right">
-                      <strong>Principal</strong>
-                    </TableCell>
-                    <TableCell align="right">
-                      <strong>Interest</strong>
-                    </TableCell>
-                    <TableCell align="right">
-                      <strong>Remaining Balance</strong>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {schedule.map((row) => (
-                    <TableRow key={row.month}>
-                      <TableCell>{row.month}</TableCell>
-                      <TableCell align="right">
-                        {row.principal} {currency}
-                      </TableCell>
-                      <TableCell align="right">
-                        {row.interest} {currency}
-                      </TableCell>
-                      <TableCell align="right">
-                        {row.balance} {currency}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Paper>
-          </>
-        )}
+        <EmiCalculator
+          emi={emi}
+          resetTable={resetTable}
+          convertedEmi={convertedEmi}
+          currency={currency}
+          conversionRates={conversionRates}
+          handleCurrencyChange={handleCurrencyChange}
+          getCurrencySymbol={getCurrencySymbol}
+        />
+        <AmortizationTable schedule={schedule} currency={currency} />
       </Container>
     </>
   );
