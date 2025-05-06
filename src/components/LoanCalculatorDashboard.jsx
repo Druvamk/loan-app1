@@ -4,15 +4,11 @@ import { AppContext } from "../context/AppContext";
 import AmortizationTable from "./AmortizationTable";
 import EmiCalculator from "./EmiCalculator";
 import Header from "./Header";
-// import { useLoanCalculator } from "../hooks/useLoanCalculator";
-// import { useLoanCalculator } from "../hooks/useLoanCalculator";
 
 export default function LoanCalculatorDashboard() {
   const {
     currency,
     setCurrency,
-    darkMode,
-    setDarkMode,
     loanAmount,
     setLoanAmount,
     interestRate,
@@ -116,7 +112,7 @@ export default function LoanCalculatorDashboard() {
 
   return (
     <>
-      <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+      {/* <Header darkMode={darkMode} setDarkMode={setDarkMode} /> */}
       <Container>
         <Typography variant="h4" align="left" gutterBottom mt={4}>
           Loan Calculator Dashboard
