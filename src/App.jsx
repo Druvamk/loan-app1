@@ -9,6 +9,8 @@ import { AppProvider, AppContext } from "./context/AppContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoanCalculatorDashboard from "./components/LoanCalculatorDashboard";
 import Header from "./components/Header";
+import About from "./components/About";
+import Error from "./components/Error";
 
 const App = () => {
   return (
@@ -28,8 +30,8 @@ const App = () => {
                   <Route path="/" element={<LoanCalculatorDashboard />} />
                   <Route path="/calculator" element={<>calculator</>} />
                   <Route path="/exchange" element={<>exchange</>} />
-                  <Route path="/about" element={<>bsdfvdi</>} />
-                  <Route path="*" element={<>cdufvhdi</>} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="*" element={<Error />} />
                 </Routes>
               </Container>
             </Router>
